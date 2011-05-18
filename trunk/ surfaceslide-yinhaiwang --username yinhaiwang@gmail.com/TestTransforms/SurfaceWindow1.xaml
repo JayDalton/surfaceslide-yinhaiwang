@@ -1,0 +1,100 @@
+﻿<!--
+    SurfaceSlide: Digital Slide Viewer for Pathology. 
+    Copyright (C) 2011 Yinhai Wang
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see<http://www.gnu.org/licenses/> .
+    
+    Contact: Yinhai Wang yinhaiwang@gmail.com
+-->
+<s:SurfaceWindow x:Class="SurfaceSlide.SurfaceWindow1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:s="http://schemas.microsoft.com/surface/2008"
+    xmlns:local="clr-namespace:SurfaceSlide"
+    Title="SurfaceSlide">
+
+    <s:SurfaceWindow.Resources>
+        
+        <!--Information Background Color-->
+        <LinearGradientBrush x:Key="InfoTextBackgroundBrush" 
+                             EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#26FFFFFF"
+                  Offset="0" />
+            <GradientStop Color="#19000000"
+                  Offset="0.189" />
+            <GradientStop Color="#00000000"
+                  Offset="1" />
+        </LinearGradientBrush>
+        
+        <Style x:Key="InfoTextStyle" TargetType="{x:Type RichTextBox}">
+            <Setter Property="Background" Value="{StaticResource InfoTextBackgroundBrush}" />
+            <Setter Property="BorderBrush" Value="{x:Null}" />
+            <Setter Property="BorderThickness" Value="0,0,0,0" />
+            <Setter Property="Foreground" Value="#FFE8E8E8" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Margin" Value="0,0,0,0" />
+            <Setter Property="Padding" Value="100,0,100,10" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="IsHitTestVisible" Value="False" />
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="Width" Value="1024" />
+            <Setter Property="Opacity" Value="1" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="2"
+                              Color="#FF000000"
+                              Direction="315"
+                              Opacity="0.6"
+                              ShadowDepth="2" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <ImageBrush x:Key="WindowBackground" 
+                    Stretch="None" Opacity="0.6" 
+                    ImageSource="pack://application:,,,/Resources/WindowBackground.jpg"/>
+    </s:SurfaceWindow.Resources>
+    
+    
+    
+    
+    <Grid Name="HomerGrid" Height="768" Width="1024">
+
+        <RichTextBox Style="{StaticResource InfoTextStyle}" Margin="0,0,0,0">
+            <FlowDocument>
+                <Paragraph LineHeight="17">
+                    <Run Name="InfoFixed" Text="Please use SmartCard login to continue:"/>
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+
+        <Image Name="logo"
+               Source=".\Resources\icon.png"
+               Stretch="None"
+               HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+        <s:TagVisualizer VisualizationAdded="OnVisualizationAdded">
+            <s:TagVisualizer.Definitions>
+                <s:ByteTagVisualizationDefinition Source="LoginPanel.xaml" 
+                                                  PhysicalCenterOffsetFromTag="0,2" LostTagTimeout="1000"
+                                                  MaxCount="1" TagRemovedBehavior="Fade" 
+                                                  Value="0x04" OrientationOffsetFromTag="270" />
+            </s:TagVisualizer.Definitions>
+        </s:TagVisualizer>
+    </Grid>
+</s:SurfaceWindow>

@@ -1,0 +1,65 @@
+﻿<!--SurfaceSlide: Digital Slide Viewer for Pathology. 
+    Copyright (C) 2011 Yinhai Wang
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see<http://www.gnu.org/licenses/> .
+    
+    Contact: Yinhai Wang yinhaiwang@gmail.com
+-->
+
+
+
+<s:SurfaceUserControl x:Class="SurfaceSlide.Annotation"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:s="http://schemas.microsoft.com/surface/2008"
+    Height="300" Width="300">
+
+    <Canvas Name="HomerCanvas">
+
+        <s:SurfaceTextBox  x:Name="AnnoText" SnapsToDevicePixels="True"
+                           BorderThickness="2" BorderBrush="Black" 
+                           FontFamily="SegoUI" TextAlignment="Center"
+                           Background="Transparent"
+                           Canvas.Left="0" Canvas.Top="300"
+                           Margin="0, -2, 0, 0"
+                           Height="150" Width="300" KeyboardLayout="Alphanumeric" 
+                           AcceptsTab="True" 
+                           MaxLines="8" TextWrapping="Wrap" KeyDown="OnKeyDown">
+                        Notes:
+            
+            <s:SurfaceTextBox.BitmapEffect>
+                <BitmapEffectGroup>
+                    <BevelBitmapEffect>
+                    </BevelBitmapEffect>
+                    <DropShadowBitmapEffect>
+                    </DropShadowBitmapEffect>
+                </BitmapEffectGroup>
+            </s:SurfaceTextBox.BitmapEffect>
+            
+        </s:SurfaceTextBox>
+        
+        <s:SurfaceRadioButton Name="AnnoRadioButton" 
+                              Canvas.Left="135" Canvas.Top="-15"
+                              Height="30" Width="30" 
+                              Checked="OnAnnoFinished">
+
+            <s:SurfaceRadioButton.BitmapEffect>
+                <BitmapEffectGroup>
+                    <BlurBitmapEffect Radius="3"></BlurBitmapEffect >
+                </BitmapEffectGroup>
+            </s:SurfaceRadioButton.BitmapEffect>
+
+        </s:SurfaceRadioButton>
+    </Canvas>
+</s:SurfaceUserControl>

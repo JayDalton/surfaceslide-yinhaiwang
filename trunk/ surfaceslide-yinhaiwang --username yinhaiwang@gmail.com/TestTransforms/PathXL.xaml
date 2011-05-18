@@ -1,0 +1,256 @@
+﻿<!--
+    SurfaceSlide: Digital Slide Viewer for Pathology. 
+    Copyright (C) 2011 Yinhai Wang
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see<http://www.gnu.org/licenses/> .
+    
+    Contact: Yinhai Wang yinhaiwang@gmail.com
+-->
+<s:SurfaceUserControl x:Class="SurfaceSlide.PathXL"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:s="http://schemas.microsoft.com/surface/2008"
+    xmlns:local="clr-namespace:SurfaceSlide"
+    Name="GridViewControl"
+    Width="1024" Height="768">
+
+    <s:SurfaceUserControl.Resources>
+
+        <!-- ShoppingList content -->
+        <XmlDataProvider x:Key="SlideThumbnailData" XPath="Root">
+            <x:XData>
+                <Root xmlns="">
+                    <Entry Name="CHCCase01" Image=".\Resources\CHCCase01.jpg" />
+                    <Entry Name="CHCCase02" Image=".\Resources\CHCCase02.jpg" />
+                </Root>
+            </x:XData>
+        </XmlDataProvider>
+
+        <!--Information Background Color-->
+        <LinearGradientBrush x:Key="InfoTextBackgroundBrush" 
+                             EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#26FFFFFF"
+                  Offset="0" />
+            <GradientStop Color="#19000000"
+                  Offset="0.189" />
+            <GradientStop Color="#00000000"
+                  Offset="1" />
+        </LinearGradientBrush>
+
+        <Style x:Key="InfoTextStyle" TargetType="{x:Type RichTextBox}">
+            <Setter Property="Background" Value="{StaticResource InfoTextBackgroundBrush}" />
+            <Setter Property="BorderBrush" Value="{x:Null}" />
+            <Setter Property="BorderThickness" Value="0,0,0,0" />
+            <Setter Property="Foreground" Value="#FFE8E8E8" />
+            <Setter Property="VerticalAlignment" Value="Bottom" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Margin" Value="0,0,0,0" />
+            <Setter Property="Padding" Value="100,0,100,10" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="IsHitTestVisible" Value="False" />
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="Width" Value="1024" />
+            <Setter Property="Opacity" Value="1" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="2"
+                              Color="#FF000000"
+                              Direction="315"
+                              Opacity="0.6"
+                              ShadowDepth="2" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Brush for ListBox -->
+        <LinearGradientBrush x:Key="ListBackgroundBrush" EndPoint="1,0" StartPoint="0,0">
+            <GradientStop Color="#FFA4B4BD" Offset="0"/>
+            <GradientStop Color="#FFDFE9EE" Offset="1"/>
+        </LinearGradientBrush>
+
+        <!-- List Style -->
+        <Style x:Key="SlideListStyle" TargetType="{x:Type s:SurfaceListBox }">
+            <Style.Resources>
+                <!-- Brush for selected ListBoxItems -->
+                <LinearGradientBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" EndPoint="0.5,0" StartPoint="0.5,1">
+                    <GradientStop Color="#33000000" Offset="0"/>
+                    <GradientStop Color="#00000000" Offset="1"/>
+                </LinearGradientBrush>
+            </Style.Resources>
+            
+            <Setter Property="Background" Value="{StaticResource ListBackgroundBrush}"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="Height" Value="135"/>
+            <Setter Property="ItemTemplateSelector">
+                <Setter.Value>
+                    <local:ListTemplateSelector>
+                        
+                        <local:ListTemplateSelector.NormalItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="5" RenderTransformOrigin="0.5, 0.5">
+                                    <Image Source="{Binding XPath=@Image}" 
+                                           Height="100" Width="100" />
+                                    <TextBlock Text="{Binding XPath=@Name}" 
+                                               Foreground="White" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </local:ListTemplateSelector.NormalItemTemplate>
+                        
+                        <local:ListTemplateSelector.StartingItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <StackPanel Margin="5" RenderTransformOrigin="0.5, 0.5">
+                                        <Image Source="{Binding XPath=@Image}" 
+                                               Height="100" Width="100" />
+                                        <TextBlock Text="{Binding XPath=@Name}" 
+                                                   Foreground="White" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                    
+                                    <Image Name ="temp" Source=".\Resources\separator.png"
+                                           HorizontalAlignment="Left" VerticalAlignment="Stretch" 
+                                           Margin="-24,-4,0,-4"/>
+                                </Grid>
+                            </DataTemplate>
+                        </local:ListTemplateSelector.StartingItemTemplate>
+                    </local:ListTemplateSelector>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <s:SurfaceScrollViewer Background="{TemplateBinding Background}" 
+                                               VerticalScrollBarVisibility="Disabled" 
+                                               HorizontalScrollBarVisibility="Hidden" 
+                                               CanContentScroll="True">
+                            <local:LoopingPanel IsItemsHost="True"/>
+                        </s:SurfaceScrollViewer>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+        </Style>
+    
+    </s:SurfaceUserControl.Resources>
+
+
+    <s:ScatterView x:Name="Scatter" Height="768" Width="1024" Margin="0, 0, 0, 0" IsEnabled="True">
+
+        <s:ScatterViewItem Name="ScatterCanvas" CanMove="False" CanRotate="False" CanScale="False" IsActive="True"
+                           VerticalAlignment="Top" HorizontalAlignment="Left" Margin="-1024,-768,0,0" Center="1536, 1152" 
+                           ShowsActivationEffects="False" Height="2304" Width="3072">
+
+            <Canvas Name="PathXLCanvas" Height="2304" Width="3072" Background="White" 
+                    VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0, 0, 0, 0">
+                <!--The inner grid, contains 12x9 blocks-->
+                <Grid Name="VirtualSlideGrid" Height="2304" Width="3072" ShowGridLines="False" RenderTransformOrigin="0,0" 
+                      HorizontalAlignment="Center" VerticalAlignment="Center" Background="White">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="256" />
+                        <ColumnDefinition Width="256" />
+                        <ColumnDefinition Width="256" />
+                        <ColumnDefinition Width="256" />
+                        <ColumnDefinition Width="256" />
+                        <ColumnDefinition Width="256" />
+                        <ColumnDefinition Width="256" />
+                        <ColumnDefinition Width="256" />
+                        <ColumnDefinition Width="256" />
+                        <ColumnDefinition Width="256" />
+                        <ColumnDefinition Width="256" />
+                        <ColumnDefinition Width="256" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="256" />
+                        <RowDefinition Height="256" />
+                        <RowDefinition Height="256" />
+                        <RowDefinition Height="256" />
+                        <RowDefinition Height="256" />
+                        <RowDefinition Height="256" />
+                        <RowDefinition Height="256" />
+                        <RowDefinition Height="256" />
+                        <RowDefinition Height="256" />
+                    </Grid.RowDefinitions>
+
+                    <Image Name="logo" Source=".\Resources\icon.png"
+                           Stretch="None" Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="4" Grid.RowSpan="3" />
+                </Grid>
+                
+                <s:ElementMenu Name="MainMenu" ActivationMode="AlwaysActive" 
+                                   Background="Green" Foreground="BlanchedAlmond"
+                                   Height="50" Width="50" 
+                                   HorizontalAlignment="Center" VerticalAlignment="Top"
+                                   Canvas.Left="1511" Canvas.Top="1756">
+                    <s:ElementMenuItem Header="Info" Click="OnInfo" />
+                    <s:ElementMenuItem Header="Annotation-Circle" Click="OnAnnotationCircle" />
+                    <s:ElementMenuItem Header="Close Slide" Click="OnCloseSlide" />
+                    <s:ElementMenuItem Header="Reset" Click="OnReset" />
+                    <s:ElementMenuItem Header="Annotation-Rectangle" Click="OnAnnotationRectangle" />
+                </s:ElementMenu>
+                
+                <RichTextBox Style="{StaticResource InfoTextStyle}" Margin="1024,768,1024,0">
+                    <FlowDocument>
+                        <Paragraph LineHeight="17">
+                            <Run Name="InfoFixed" Text="Open up a virtual slide." />
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
+
+                <s:SurfaceListBox x:Name="SlideListBox"  
+                                  PreviewContactDown="OnPreviewContactDown"
+                                  PreviewContactChanged="OnPreviewContactChanged"
+                                  PreviewContactUp="OnPreviewContactUp" 
+                                  ItemsSource="{Binding Source={StaticResource SlideThumbnailData}, XPath=Entry}"
+                                  Style="{StaticResource SlideListStyle}" 
+                                  Margin="1024,1024,0,86" 
+                                  Height="135" Width="1024" Canvas.Top="377.5">
+                </s:SurfaceListBox>
+            </Canvas>
+        </s:ScatterViewItem>
+
+        <s:ScatterViewItem Name="MenuScatterItem" CanMove="True" CanRotate="True" CanScale="False"
+                           VerticalAlignment="Top" HorizontalAlignment="Center"
+                           Margin="0, 0, 0, 0" Center="512, 384" IsActive="False" StaysActive="True"
+                           BorderThickness="5" Opacity="0.8">
+            
+            <Canvas Name="MenuCanvas" Height="150" Width="200" Background="Blue" 
+                    VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0, 0, 0, 0">
+            
+                <Image Source=".\Resources\info.png" Opacity="0.5"
+                       Height="150" Width="200"
+                       VerticalAlignment="Stretch" HorizontalAlignment="Center" />
+         
+                <Label Name="InfoBar" FontSize="12" Foreground="White"
+                      Height="100" Width="200" FontWeight="2"
+                      VerticalAlignment="Center" HorizontalAlignment="Center"
+                      Focusable="False" IsHitTestVisible="False" 
+                      Margin="0, 30, 0, 0">
+                    Open up a virtual slide
+                </Label>
+
+                <s:ElementMenu ActivationMode="AlwaysActive"
+                               Background="Purple" Foreground="DarkCyan"
+                               Height="50" Width="50" 
+                               HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                               Margin="75,125,0,0" Orientation="180">
+                    <s:ElementMenuItem Header="Hide" Click="OnHideInfo" />
+                </s:ElementMenu>
+
+            </Canvas>
+
+        </s:ScatterViewItem>
+    </s:ScatterView>
+</s:SurfaceUserControl>
